@@ -1,8 +1,30 @@
 package com.strategicgains.cli;
 
-public class Main {
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+import com.strategicgains.cli.command.Commands;
 
+/**
+ * API Command Line Interface (apicli).
+ * 
+ * The main entry point for apicli, the Command-line API Shell.
+ */
+public class Main {
+	public static void main(String[] args) throws Exception {
+//		Config config = Config.load();
+
+		// If there are no arguments, enter shell mode.
+		if (args.length == 0) {
+			Shell.run();
+			System.exit(0);
+		}
+
+		// Otherwise, process the arguments.
+		try {
+			Commands c = Commands.fromString(args[0]);
+			c.execute(args);
+			System.exit(0);
+		} catch (IllegalArgumentException e) {
+			System.err.println(e.getMessage());
+			System.exit(1);
+		}
 	}
 }
