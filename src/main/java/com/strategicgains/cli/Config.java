@@ -19,7 +19,7 @@ public class Config {
 //	private OpenAPI oas;
 //	private Environments environments;
 //	private History history;
-	private ResourceMap resources;
+//	private ResourceMap resources;
 
 	public Config() {
 		clientId = "";
