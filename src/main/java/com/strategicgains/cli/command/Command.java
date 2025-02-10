@@ -10,7 +10,7 @@ public interface Command {
 	 * Execute the command with the given arguments.
 	 * 
 	 * @param args
-	 * @return
+	 * @return a string that is be printed to the console. Null if no message.
 	 */
 	String execute(String[] args);
 

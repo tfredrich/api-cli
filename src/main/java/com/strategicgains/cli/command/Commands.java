@@ -3,19 +3,25 @@ package com.strategicgains.cli.command;
 import com.strategicgains.cli.Usage;
 
 public enum Commands {
-	ENV(new Env()),
-	HELP(new Help()),
-	OAS(new OasImport()),
-	RESOURCE(new Resource());
+	ENV(new Env(), "e"),
+	HELP(new Help(), "h"),
+	OAS(new OasImport(), "o"),
+	RESOURCE(new Resource(), "r");
 
 	private Command command;
+	private String synonym;
 
-	Commands(Command command) {
+	Commands(Command command, String synonym) {
 		this.command = command;
+		this.synonym = synonym;
 	}
 
 	public void execute(String... input) {
-		System.out.println(command.execute(input));
+		String response = command.execute(input);
+
+		if (response != null) {
+			System.out.println(response);
+		}
 	}
 
 	public String command() {
@@ -32,10 +38,11 @@ public enum Commands {
 
 	public static Commands fromString(String command) {
 		for (Commands c : Commands.values()) {
-			if (c.name().equalsIgnoreCase(command)) {
+			if (c.command().equals(command) || c.synonym.equals(command)) {
 				return c;
 			}
 		}
+
 		throw new IllegalArgumentException("Unknown command: " + command);
 	}
 }
