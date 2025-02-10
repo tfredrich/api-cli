@@ -5,7 +5,7 @@ import com.strategicgains.cli.Usage;
 public enum Commands {
 	ENV(new Env(), "e"),
 	HELP(new Help(), "h"),
-	OAS(new OasImport(), "o"),
+	OAS(new Oas(), "o"),
 	RESOURCE(new Resource(), "r");
 
 	private Command command;
