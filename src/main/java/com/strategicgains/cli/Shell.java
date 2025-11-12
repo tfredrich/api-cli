@@ -1,6 +1,7 @@
 package com.strategicgains.cli;
 
-import com.strategicgains.cli.command.Commands;
+import com.strategicgains.cli.command.Command;
+import com.strategicgains.cli.command.CommandRegistry;
 import com.strategicgains.cli.util.Utils;
 
 public class Shell {
@@ -37,7 +38,7 @@ public class Shell {
 		}
 
 		try {
-			Commands c = Commands.fromString(args[0]);
+			Command c = CommandRegistry.find(args[0]);
             c.execute(args);
         }
 		catch (IllegalArgumentException e) {

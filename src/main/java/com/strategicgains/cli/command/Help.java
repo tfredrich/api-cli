@@ -1,7 +1,5 @@
 package com.strategicgains.cli.command;
 
-import java.util.stream.Stream;
-
 import com.strategicgains.cli.Usage;
 
 public class Help extends AbstractCommand {
@@ -17,8 +15,8 @@ public class Help extends AbstractCommand {
 	@Override
 	public Usage getUsage() {
         Usage usage = new Usage("apicli [command [parameters]", "No parameters for shell access.");
-		Stream.of(Commands.values()).filter(command -> !Commands.HELP.equals(command))
-				.forEach(command -> usage.withOption(command.usage()));
+		CommandRegistry.values().stream().filter(command -> !command.getName().equals(this.getName()))
+				.forEach(command -> usage.withOption(command.getUsage()));
 		return usage;
 	}
 
@@ -28,8 +26,8 @@ public class Help extends AbstractCommand {
 		}
 
 		try {
-			Commands command = Commands.fromString(args[1]);
-			return command.usage();
+			Command command = CommandRegistry.find(args[1]);
+			return command.getUsage();
 		} catch (IllegalArgumentException e) {
 			return new Usage(args[1], e.getMessage());
 		}

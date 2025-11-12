@@ -1,6 +1,7 @@
 package com.strategicgains.cli;
 
-import com.strategicgains.cli.command.Commands;
+import com.strategicgains.cli.command.Command;
+import com.strategicgains.cli.command.CommandRegistry;
 
 /**
  * API Command Line Interface (apicli).
@@ -19,7 +20,7 @@ public class Main {
 
 		// Otherwise, process the arguments.
 		try {
-			Commands c = Commands.fromString(args[0]);
+			Command c = CommandRegistry.find(args[0]);
 			c.execute(args);
 			System.exit(0);
 		} catch (IllegalArgumentException e) {
