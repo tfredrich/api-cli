@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.strategicgains.cli.exception.UnknownCommandException;
+
 public class CommandRegistry
 {
 	private static final Map<String, Command> COMMANDS = new HashMap<>();
@@ -23,6 +25,11 @@ public class CommandRegistry
 	private static void register(Command command)
 	{
 		COMMANDS.put(command.getName(), command);
+
+		if (command.hasAliases())
+		{
+			command.getAliases().forEach(alias -> COMMANDS.put(alias, command));
+		}
 	}
 
 	public static Command find(String name)
@@ -31,7 +38,7 @@ public class CommandRegistry
 
 		if (c == null)
 		{
-			throw new IllegalArgumentException("Unknown command: " + name);
+			throw new UnknownCommandException(name);
 		}
 
 		return c;
@@ -39,7 +46,7 @@ public class CommandRegistry
 
 	public static List<Command> values()
 	{
-		return List.copyOf(COMMANDS.values());
+		return COMMANDS.values().stream().distinct().toList();
 	}
 
 	public static void printHelp() {
