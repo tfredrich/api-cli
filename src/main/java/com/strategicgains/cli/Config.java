@@ -20,6 +20,7 @@ public class Config {
 //	private Environments environments;
 //	private History history;
 //	private ResourceMap resources;
+	private boolean isDebug = false;
 
 	public Config() {
 		clientId = "";
@@ -49,6 +50,14 @@ public class Config {
 		this.clientSecret = clientSecret;
 	}
 
+	public boolean isDebug() {
+		return isDebug;
+	}
+
+	public void setDebug(boolean isDebug) {
+		this.isDebug = isDebug;
+	}
+
 	public String getIss() {
 		return iss;
 	}
@@ -59,10 +68,12 @@ public class Config {
 
 	/**
 	 * Load the configuration from the default location.
+	 * @param isDebug true to print stacktraces on error. 
+	 * @param string alternate configuration file location (optional).
 	 * 
 	 * @return the configuration.
 	 */
-	public static Config load() throws Exception {
+	public static Config load(String string, boolean isDebug) throws Exception {
 		String path = System.getenv("PWD");
 
 		if (path == null) {

@@ -2,9 +2,14 @@ package com.strategicgains.cli.command;
 
 import com.strategicgains.cli.Usage;
 
-public class Help extends AbstractCommand {
+public class Help
+extends AbstractCommand {
+	public static final String COMMAND_NAME = "help";
+	private static final String ALIAS = "h";
+	private static final String DESCRIPTION = "[command] : Get help for apicli or a particular command.";
 	protected Help() {
-		super("help", "[command] : Get help for apicli or a particular command.");
+		super(COMMAND_NAME, DESCRIPTION);
+		addAlias(ALIAS);
 	}
 
 	@Override

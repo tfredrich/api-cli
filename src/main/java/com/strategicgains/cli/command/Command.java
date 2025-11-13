@@ -1,5 +1,7 @@
 package com.strategicgains.cli.command;
 
+import java.util.List;
+
 import com.strategicgains.cli.Usage;
 
 /**
@@ -13,6 +15,20 @@ public interface Command {
 	 * @return a string that is be printed to the console. Null if no message.
 	 */
 	String execute(String[] args);
+
+	/**
+	 * Get the list of aliases for the command.
+	 * 
+	 * @return a list of aliases.
+	 */
+	List<String> getAliases();
+
+	/**
+	 * Determine if the command has any aliases.
+	 * 
+	 * @return true if the command has aliases, false otherwise.
+	 */
+	boolean hasAliases();
 
 	/**
 	 * Get the name of the command that is used in the shell or in scripts.

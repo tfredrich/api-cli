@@ -9,12 +9,44 @@ import com.strategicgains.cli.command.CommandRegistry;
  * The main entry point for apicli, the Command-line API Shell.
  */
 public class Main {
-	public static void main(String[] args) throws Exception {
-//		Config config = Config.load();
+//	private static final String CLI_PATTERN = "[-d|--debug][-h|--help][-v|--version][-c|--config FILE]";
+	private static final String CLI_PATTERN = "c~dhv";
+
+	public static void main(String[] args) {
+		CommandLine cl = new CommandLineParser(CLI_PATTERN).parse(args);
+		if (cl.isOptionSet('h')) {
+			CommandRegistry.printHelp();
+			System.exit(0);
+		}
+
+		if (cl.isOptionSet('v')) {
+			System.out.println("apicli version 1.0.0");
+			System.exit(0);
+		}
+
+		boolean isDebug = false;
+
+		if (cl.isOptionSet('d')) {
+			isDebug = true;
+			System.out.println("Debug mode enabled");
+		}
+
+		Config config = null;
+
+		try
+		{
+			config = Config.load(cl.getOptionArgument('c'), isDebug);
+			if (isDebug) config.setDebug(true);
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error loading configuration: " + e.getMessage());
+			System.exit(1);
+		}
 
 		// If there are no arguments, enter shell mode.
 		if (args.length == 0) {
-			Shell.run();
+			Shell.run(config);
 			System.exit(0);
 		}
 

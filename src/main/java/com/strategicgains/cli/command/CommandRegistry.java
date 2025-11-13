@@ -15,6 +15,11 @@ public class CommandRegistry
 		register(new Resource());
 	}
 
+	private CommandRegistry()
+	{
+		// Prevent instantiation.
+	}
+
 	private static void register(Command command)
 	{
 		COMMANDS.put(command.getName(), command);
@@ -35,5 +40,11 @@ public class CommandRegistry
 	public static List<Command> values()
 	{
 		return List.copyOf(COMMANDS.values());
+	}
+
+	public static void printHelp() {
+		COMMANDS.get(Help.COMMAND_NAME).execute(new String[] {Help.COMMAND_NAME});
+		// TODO Auto-generated method stub
+		
 	}
 }
