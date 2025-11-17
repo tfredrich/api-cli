@@ -1,14 +1,15 @@
 package com.strategicgains.cli.command;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.strategicgains.cli.Usage;
 import com.strategicgains.cli.exception.UnknownCommandException;
 
 public class CommandRegistry
 {
-	private static final Map<String, Command> COMMANDS = new HashMap<>();
+	private static final Map<String, Command> COMMANDS = new LinkedHashMap<>();
 	static
 	{
 		register(new Env());
@@ -49,9 +50,24 @@ public class CommandRegistry
 		return COMMANDS.values().stream().distinct().toList();
 	}
 
-	public static void printHelp() {
-		COMMANDS.get(Help.COMMAND_NAME).execute(new String[] {Help.COMMAND_NAME});
-		// TODO Auto-generated method stub
-		
+	public static String printHelp() {
+		return getAllUsage().toString();
+	}
+
+	private static Usage getAllUsage() {
+		Usage.Builder b = Usage.builder("apicli [command [parameters]")
+			.description("No command or parameters for shell access.")
+			.heading("Commands");
+		CommandRegistry.values().stream().forEach(command -> b.option(command.getUsage()));
+		return b.build();
+	}
+
+	public static Usage getUsage(String[] args) {
+		if (args.length == 0) {
+			return getAllUsage();
+		}
+
+		Command command = CommandRegistry.find(args[1]);
+		return command.getUsage();
 	}
 }

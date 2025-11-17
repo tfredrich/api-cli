@@ -73,14 +73,48 @@ public class Config {
 	 * 
 	 * @return the configuration.
 	 */
-	public static Config load(String string, boolean isDebug) throws Exception {
-		String path = System.getenv("PWD");
+	public static Config load(String configLocation, boolean isDebug)
+	throws Exception {
+		String fileLocation = null;
+		
+		if (configLocation != null) {
+			fileLocation = configLocation;
+		}
+		else {
+			String path = System.getenv("APICLI_CONFIG");
 
-		if (path == null) {
-			path = System.getProperty("user.pwd");
+			if (fileLocation == null) {
+				path = System.getProperty("user.dir");
+			}
+
+			fileLocation = String.format(FILE_FORMAT_STRING, path, CONFIG_SUBDIR, CONFIG_FILE);
 		}
 
-		Properties p = loadProperties(String.format(FILE_FORMAT_STRING, path, CONFIG_SUBDIR, CONFIG_FILE));
+		try {
+			return loadFromFile(fileLocation);
+		}
+		catch (IOException e) {
+			if (isDebug) {
+				e.printStackTrace();
+			}
+
+			return createDefaultConfig(fileLocation);
+		}
+	}
+
+	private static Config createDefaultConfig(String fileLocation) {
+		Properties p = new Properties();
+		p.setProperty("clientId", "your-client-id");
+		p.setProperty("clientSecret", "your-client-secret");
+		p.setProperty("iss", "https://your-issuer.com");
+		createFilesystemIfNeeded(fileLocation);
+		writeProperties(fileLocation, p);
+		return fromProperties(p);
+	}
+
+	private static Config loadFromFile(String fileLocation)
+	throws IOException {
+		Properties p = loadProperties(fileLocation);
 		return fromProperties(p);
 	}
 

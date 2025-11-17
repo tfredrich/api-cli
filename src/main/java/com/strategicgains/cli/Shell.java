@@ -2,12 +2,14 @@ package com.strategicgains.cli;
 
 import java.io.Console;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.strategicgains.cli.command.Command;
 import com.strategicgains.cli.command.CommandRegistry;
-import com.strategicgains.cli.util.Utils;
 
 public class Shell {
-	private static final Logger LOG = Logger.getLogger(Shell.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Shell.class);
 	private static final String PROMPT = "> ";
 	private static final String EXIT = "exit";
 
@@ -23,13 +25,16 @@ public class Shell {
 	}
 
 	private int execute() {
-		System.out.println("Entering interactive mode");
-		System.out.println("Type 'exit' to exit");
 		Console console = System.console();
+
 		if (console == null) {
 			LOG.error("No console available; exiting interactive mode.");
 			return 1;
 		}
+
+		console.printf("Entering interactive mode%n");
+		console.printf("Type 'exit' to exit%n");
+
 		while (true) {
 			console.printf(PROMPT);
 			if (!executeCommand(console)) {
@@ -37,7 +42,7 @@ public class Shell {
 			}
 		}
 
-		LOG.info("Exiting interactive mode");
+		console.printf("Exiting interactive mode%n");
 		return 0;
 	}
 
@@ -54,7 +59,7 @@ public class Shell {
             c.execute(args);
         }
 		catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+			console.printf("Error: %s%n", e.getMessage());
         }
 
 		return true;

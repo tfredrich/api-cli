@@ -2,8 +2,6 @@ package com.strategicgains.cli.command;
 
 import java.util.List;
 
-import com.strategicgains.cli.Usage;
-
 public abstract class AbstractCommand
 implements Command
 {
@@ -41,10 +39,5 @@ implements Command
 	@Override
 	public String getDescription() {
 		return description;
-	}
-
-	@Override
-	public Usage getUsage() {
-		return new Usage(getName(), getDescription());
 	}
 }

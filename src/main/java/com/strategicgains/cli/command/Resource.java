@@ -8,12 +8,17 @@ import com.strategicgains.cli.Usage;
 import com.strategicgains.cli.util.HttpMethod;
 
 public class Resource extends AbstractHttpCommand {
+	private static final String DESCRIPTION = "Manage resource types and their URLs.";
+	private static final String NAME = "resource";
+	private static final String ALIAS = "res";
+
 	private static final String RESOURCE_NOT_FOUND = "Resource not found: ";
 
 	private Map<String, ResourceUrls> resources = new HashMap<>();
 
 	public Resource() {
-		super("resource", "Manage resource types and their URLs.");
+		super(NAME, DESCRIPTION);
+		addAlias(ALIAS);
 	}
 
 	@Override
@@ -115,9 +120,15 @@ public class Resource extends AbstractHttpCommand {
 
 	@Override
 	public Usage getUsage() {
-		return super.getUsage().withOption("add <name> <http_method> <url>", "Add a resource type with a URL.")
-				.withOption("remove <name> [method]", "Remove a resource type or per-method URL.")
-				.withOption("list [name]", "List resource type(s) and their URLs.");
+		Usage.Builder b = Usage.builder(getName() + " <operation> [parameters]")
+				.description(getDescription())
+				.heading("Resource Management Commands")
+				.option("add <name> <http_method> <url>", "Add a resource type with a URL.")
+				.option("remove <name> [method]", "Remove a resource type or per-method URL.")
+				.option("list [name]", "List resource type(s) and their URLs.");
+
+		if (hasAliases()) getAliases().forEach(b::alias);
+		return b.build();
 	}
 
 	private HttpMethod toMethod(String method) {

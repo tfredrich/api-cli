@@ -3,11 +3,13 @@ package com.strategicgains.cli.command;
 import com.strategicgains.cli.Usage;
 
 public class Oas extends AbstractCommand {
-	private static final String NAME = "oas";
+	private static final String NAME = "openapi";
 	private static final String DESCRIPTION = "Manage OpenAPI Specification files for automatic URL configuration.";
+	private static final String ALIAS = "oas";
 
 	protected Oas() {
 		super(NAME, DESCRIPTION);
+		addAlias(ALIAS);
 	}
 
 	@Override
@@ -63,10 +65,16 @@ public class Oas extends AbstractCommand {
 
 	@Override
 	public Usage getUsage() {
-		return super.getUsage()
-			.withOption("add <name> <file|url>", "Add a new OAS file.")
-			.withOption("list", "List all OAS files.")
-			.withOption("pull [name]", "Refresh the OAS file.")
-			.withOption("remove <name>", "Remove an OAS file.");
+		Usage.Builder b = Usage.builder(getName() + " <operation> [parameters]")
+			.description(getDescription())
+			.heading("Open API Management Commands")
+			.option("add <name> <file|url>", "Add a new OAS file.")
+			.option("list", "List all OAS files.")
+			.option("pull [name]", "Refresh the OAS file.")
+			.option("remove <name>", "Remove an OAS file.");
+
+		if (hasAliases()) getAliases().forEach(b::alias);
+
+		return b.build();
 	}
 }

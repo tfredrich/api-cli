@@ -1,10 +1,16 @@
+
 package com.strategicgains.cli.command;
 
 import com.strategicgains.cli.Usage;
 
-public class Env extends AbstractCommand {
+public class Env
+extends AbstractCommand {
+	private static final String COMMAND_NAME = "environment";
+	private static final String COMMAND_DESCRIPTION = "Manage promotion environments.";
+	private static final String ALIAS = "env";
 	public Env() {
-		super("env", "Manage promotion environments.");
+		super(COMMAND_NAME, COMMAND_DESCRIPTION);
+		addAlias(ALIAS);
 	}
 
 	@Override
@@ -113,15 +119,20 @@ public class Env extends AbstractCommand {
 
 	@Override
 	public Usage getUsage() {
-		return super.getUsage()
-			.withOption("add <name> <baseUrl>", "Add a new environment.")
-			.withOption("commit [name]", "Commit the changes in the environment to the remote.")
-			.withOption("diff <name>", "Show the differences between the current environment and the specified environment.")
-			.withOption("list", "List all environments.")
-			.withOption("pull [name]", "Pull the environment configuration (or all environments).")
-			.withOption("push <name>", "Promote the environment configuration to the named environment.")
-			.withOption("remove <name>", "Remove an environment.")
-			.withOption("status", "Show the current environment and status information.")
-			.withOption("use <name>", "Switch to a different environment.");
+		Usage.Builder b = Usage.builder(getName() + " <operation> [parameters]")
+			.description(getDescription())
+			.heading("Environment Management Commands")
+			.option("add <name> <baseUrl>", "Add a new environment.")
+			.option("commit [name]", "Commit the changes in the environment to the remote.")
+			.option("diff <name>", "Show the differences between the current environment and the specified environment.")
+			.option("list", "List all environments.")
+			.option("pull [name]", "Pull the environment configuration (or all environments).")
+			.option("push <name>", "Promote the environment configuration to the named environment.")
+			.option("remove <name>", "Remove an environment.")
+			.option("status", "Show the current environment and status information.")
+			.option("use <name>", "Switch to a different environment.");
+
+		if (hasAliases()) getAliases().forEach(b::alias);
+		return b.build();
 	}
 }
