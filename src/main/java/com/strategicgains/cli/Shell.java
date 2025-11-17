@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.strategicgains.cli.command.Command;
 import com.strategicgains.cli.command.CommandContext;
 import com.strategicgains.cli.command.CommandRegistry;
+import com.strategicgains.cli.exception.UnknownCommandException;
 
 public class Shell {
 	private static final Logger LOG = LoggerFactory.getLogger(Shell.class);
@@ -35,13 +36,14 @@ public class Shell {
 
 		console.printf("Entering interactive mode%n");
 		console.printf("Type 'exit' to exit%n");
+		context.setConsole(console);
 
 		while (true) {
 			console.printf(PROMPT);
 			console.flush();
 			String input = console.readLine();
 
-			if (!executeCommand(input, console)) {
+			if (!executeCommand(context, input)) {
 				break;
 			}
 		}
@@ -50,7 +52,7 @@ public class Shell {
 		return 0;
 	}
 
-	private boolean executeCommand(String input, Console console) {
+	private boolean executeCommand(CommandContext context, String input) {
 		String[] args = input.split("\\s+");
 
 		if (args[0].equals(EXIT)) {
@@ -59,10 +61,10 @@ public class Shell {
 
 		try {
 			Command c = CommandRegistry.find(args[0]);
-            c.execute(args);
+            c.execute(context);
         }
-		catch (IllegalArgumentException e) {
-			console.printf("Error: %s%n", e.getMessage());
+		catch (UnknownCommandException e) {
+			context.getConsole().printf("Error: %s%n", e.getMessage());
 
 			if (context.isDebug()) {
 				e.printStackTrace();

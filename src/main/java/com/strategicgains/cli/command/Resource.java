@@ -22,7 +22,9 @@ public class Resource extends AbstractHttpCommand {
 	}
 
 	@Override
-	public String execute(String[] args) {
+	public int execute(CommandContext context) {
+		String[] args = context.getArguments();
+
 		if (args.length < 2) {
 			throw new IllegalArgumentException("missing resource command");
 		}
@@ -43,10 +45,10 @@ public class Resource extends AbstractHttpCommand {
         default:
 		}
 
-		return null;
+		return 1;
 	}
 
-	private String add(String[] args) {
+	private int add(String[] args) {
 		if (args.length < 5) {
 			throw new IllegalArgumentException("missing resource-name, HTTP method, or URL");
 		}
@@ -54,10 +56,11 @@ public class Resource extends AbstractHttpCommand {
 		return add(args[2], toMethod(args[3]), args[4]);
 	}
 
-	private String add(String resourceName, HttpMethod httpMethod, String resourceUrl) {
+	private int add(String resourceName, HttpMethod httpMethod, String resourceUrl) {
 		ResourceUrls resource = resources.computeIfAbsent(resourceName, k -> new ResourceUrls());
 		resource.put(httpMethod, resourceUrl);
-		return String.format("Resource added: %s(%s)", resourceName, httpMethod);
+//		return String.format("Resource added: %s(%s)", resourceName, httpMethod);
+		return 0;
 	}
 
 	private void list(String resourceName) {
@@ -79,7 +82,7 @@ public class Resource extends AbstractHttpCommand {
 		}
 	}
 
-	private String remove(String[] args) {
+	private int remove(String[] args) {
 		if (args.length < 3) {
 			throw new IllegalArgumentException("missing resource name");
 		}
@@ -91,15 +94,16 @@ public class Resource extends AbstractHttpCommand {
 		return remove(args[2], toMethod(args[3]));
 	}
 
-	private String remove(String resourceName) {
+	private int remove(String resourceName) {
 		if (resources.remove(resourceName) == null) {
 			throw new IllegalArgumentException(RESOURCE_NOT_FOUND + resourceName);
 		}
 
-		return String.format("Resource removed: %s", resourceName);
+//		return String.format("Resource removed: %s", resourceName);
+		return 0;
 	}
 
-	private String remove(String resourceName, HttpMethod method) {
+	private int remove(String resourceName, HttpMethod method) {
 		ResourceUrls resource = resources.get(resourceName);
         if (resource == null) {
             throw new IllegalArgumentException(RESOURCE_NOT_FOUND + resourceName);
@@ -115,7 +119,8 @@ public class Resource extends AbstractHttpCommand {
             }
         }
 
-		return String.format("Method removed: %s for method %s", resourceName, method);
+//		return String.format("Method removed: %s for method %s", resourceName, method);
+        return 0;
 	}
 
 	@Override
@@ -128,6 +133,7 @@ public class Resource extends AbstractHttpCommand {
 				.option("list [name]", "List resource type(s) and their URLs.");
 
 		if (hasAliases()) getAliases().forEach(b::alias);
+
 		return b.build();
 	}
 

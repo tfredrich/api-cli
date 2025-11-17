@@ -1,5 +1,7 @@
 package com.strategicgains.cli.command;
 
+import java.io.Console;
+
 import com.strategicgains.cli.CommandLine;
 import com.strategicgains.cli.CommandLineParser;
 import com.strategicgains.cli.Config;
@@ -17,6 +19,7 @@ public class CommandContext {
 	private boolean version;
 	private String configFile;
 	private Config config;
+	private Console console;
 
 	public CommandContext(String[] args) {
 		CommandLine commandLine = CLI_PARSER.parse(args);
@@ -101,5 +104,13 @@ public class CommandContext {
 	
 	public void setConfig(Config config) {
 		this.config = config;
+	}
+
+	public Console getConsole() {
+		return console;
+	}
+
+	public void setConsole(Console console) {
+		this.console = console;
 	}
 }
