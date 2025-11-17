@@ -123,7 +123,7 @@ extends AbstractCommand {
 	public Usage getUsage() {
 		Usage.Builder b = Usage.builder(getName() + " <operation> [parameters]")
 			.description(getDescription())
-			.heading("Environment Management Commands")
+			.heading("Environment operations")
 			.option("add <name> <baseUrl>", "Add a new environment.")
 			.option("commit [name]", "Commit the changes in the environment to the remote.")
 			.option("diff <name>", "Show the differences between the current environment and the specified environment.")

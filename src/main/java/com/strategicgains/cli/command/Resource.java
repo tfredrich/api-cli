@@ -127,7 +127,7 @@ public class Resource extends AbstractHttpCommand {
 	public Usage getUsage() {
 		Usage.Builder b = Usage.builder(getName() + " <operation> [parameters]")
 				.description(getDescription())
-				.heading("Resource Management Commands")
+				.heading("Resource operations")
 				.option("add <name> <http_method> <url>", "Add a resource type with a URL.")
 				.option("remove <name> [method]", "Remove a resource type or per-method URL.")
 				.option("list [name]", "List resource type(s) and their URLs.");

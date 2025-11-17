@@ -69,7 +69,7 @@ public class Oas extends AbstractCommand {
 	public Usage getUsage() {
 		Usage.Builder b = Usage.builder(getName() + " <operation> [parameters]")
 			.description(getDescription())
-			.heading("Open API Management Commands")
+			.heading("Open API operations")
 			.option("add <name> <file|url>", "Add a new OAS file.")
 			.option("list", "List all OAS files.")
 			.option("pull [name]", "Refresh the OAS file.")

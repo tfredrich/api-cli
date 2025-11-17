@@ -63,7 +63,7 @@ public class CommandRegistry
 	}
 
 	public static Usage getUsage(String[] args) {
-		if (args.length == 0) {
+		if (args.length <= 1) {
 			return getAllUsage();
 		}
 

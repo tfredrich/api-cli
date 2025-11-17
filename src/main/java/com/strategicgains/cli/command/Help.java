@@ -14,7 +14,29 @@ extends AbstractCommand {
 
 	@Override
 	public int execute(CommandContext context) {
-//		return getUsage(args).toString();
+		String[] args = context.getArguments();
+
+		String helpText;
+
+		if (args.length == 1) {
+			helpText = CommandRegistry.printHelp();
+		} else {
+			Command command = CommandRegistry.find(args[1]);
+			if (command == this) {
+				Usage.Builder b = Usage.builder(getName() + " [command]")
+					.description(getDescription())
+					.heading("Help commands:");
+				CommandRegistry.values().stream()
+					.filter(c -> !getName().equals(c.getName()))
+					.forEach(c -> b.option(c.getName(), c.getDescription()));
+				helpText = b.build().toString();
+			}
+			else {
+				helpText = command.getUsage().toString();
+			}
+		}
+
+		System.out.println(helpText);
 		return 0;
 	}
 
