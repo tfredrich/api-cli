@@ -43,7 +43,7 @@ public class Shell {
 			console.flush();
 			String input = console.readLine();
 
-			if (!executeCommand(context, input)) {
+			if (input == null || !executeCommand(context, input)) {
 				break;
 			}
 		}
