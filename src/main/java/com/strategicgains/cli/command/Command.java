@@ -11,10 +11,10 @@ public interface Command {
 	/**
 	 * Execute the command with the given arguments.
 	 * 
-	 * @param args
-	 * @return a string that is be printed to the console. Null if no message.
+	 * @param context the command context.
+	 * @return an integer exit code (0 for success, non-zero for failure).
 	 */
-	String execute(String[] args);
+	int execute(CommandContext context);
 
 	/**
 	 * Get the list of aliases for the command.

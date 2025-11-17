@@ -13,9 +13,11 @@ public class Oas extends AbstractCommand {
 	}
 
 	@Override
-	public String execute(String[] args) {
+	public int execute(CommandContext context) {
+		String[] args = context.getArguments();
+
 		if (args.length == 0) {
-			return getUsage().toString();
+			return 1;
 		}
 
 		switch (args[0]) {
@@ -28,39 +30,39 @@ public class Oas extends AbstractCommand {
 		case "remove", "rm":
 			return remove(args);
 		default:
-			return getUsage().toString();
+			return 1;
 		}
 	}
 
-	private String add(String[] args) {
+	private int add(String[] args) {
 		if (args.length < 4) {
 			throw new IllegalArgumentException("missing name or file|url");
 		}
-		return null;
+		return 1;
 	}
 
-	private String list() {
+	private int list() {
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
-	private String pull(String[] args) {
+	private int pull(String[] args) {
 		if (args.length == 1) {	// pull all
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 		}
 
 		// pull one
-       	return null;
+       	return 1;
 	}
 
-	private String remove(String[] args) {
+	private int remove(String[] args) {
 		if (args.length < 2) {
             throw new IllegalArgumentException("missing name");
 		}
 
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
 	@Override

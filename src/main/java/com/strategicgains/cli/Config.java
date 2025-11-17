@@ -1,16 +1,18 @@
 package com.strategicgains.cli;
 
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-import com.strategicgains.cli.resource.ResourceMap;
+import com.strategicgains.cli.command.CommandContext;
 
 public class Config {
 	private static final String CONFIG_SUBDIR = ".apicli";
 	private static final String CONFIG_FILE = "config";
-	private static final String HISTORY_FILE = "history";
-	private static final String RESOURCES_FILE = "resources";
+//	private static final String HISTORY_FILE = "history";
+//	private static final String RESOURCES_FILE = "resources";
 	private static final String FILE_FORMAT_STRING = "%s/%s/%s"; // home, subdir, file
 
 	private String clientId;
@@ -20,7 +22,6 @@ public class Config {
 //	private Environments environments;
 //	private History history;
 //	private ResourceMap resources;
-	private boolean isDebug = false;
 
 	public Config() {
 		clientId = "";
@@ -50,14 +51,6 @@ public class Config {
 		this.clientSecret = clientSecret;
 	}
 
-	public boolean isDebug() {
-		return isDebug;
-	}
-
-	public void setDebug(boolean isDebug) {
-		this.isDebug = isDebug;
-	}
-
 	public String getIss() {
 		return iss;
 	}
@@ -73,12 +66,12 @@ public class Config {
 	 * 
 	 * @return the configuration.
 	 */
-	public static Config load(String configLocation, boolean isDebug)
+	public static Config load(CommandContext context)
 	throws Exception {
 		String fileLocation = null;
 		
-		if (configLocation != null) {
-			fileLocation = configLocation;
+		if (context.hasConfigFile()) {
+			fileLocation = context.getConfigFile();
 		}
 		else {
 			String path = System.getenv("APICLI_CONFIG");
@@ -94,7 +87,8 @@ public class Config {
 			return loadFromFile(fileLocation);
 		}
 		catch (IOException e) {
-			if (isDebug) {
+			System.err.println("Could not load configuration from " + fileLocation + ": " + e.getMessage());
+			if (context.isDebug()) {
 				e.printStackTrace();
 			}
 
@@ -110,6 +104,19 @@ public class Config {
 		createFilesystemIfNeeded(fileLocation);
 		writeProperties(fileLocation, p);
 		return fromProperties(p);
+	}
+	private static void writeProperties(String fileLocation, Properties p) {
+		try (FileWriter writer = new FileWriter(fileLocation)) {
+			p.store(writer, "Capish Configuration File");
+		}
+		catch (IOException e) {
+			System.err.println("Error creating default config file: " + e.getMessage());
+		}
+	}
+
+	private static void createFilesystemIfNeeded(String fileLocation) {
+		File file = new File(fileLocation);
+		file.getParentFile().mkdirs();
 	}
 
 	private static Config loadFromFile(String fileLocation)

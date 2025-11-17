@@ -14,7 +14,9 @@ extends AbstractCommand {
 	}
 
 	@Override
-	public String execute(String[] args) {
+	public int execute(CommandContext context) {
+		String[] args = context.getArguments();
+
 		if (args.length < 2) {
 			throw new IllegalArgumentException("missing environment command");
 		}
@@ -41,10 +43,10 @@ extends AbstractCommand {
 		default:
 		}
 
-		return null;
+		return 1;
 	}
 
-	private String add(String[] args) {
+	private int add(String[] args) {
 		if (args.length < 4) {
 			throw new IllegalArgumentException("missing environment name or URL");
 		}
@@ -52,23 +54,23 @@ extends AbstractCommand {
 		return add(args[2], args[3]);
 	}
 
-	private String add(String name, String baseUrl) {
+	private int add(String name, String baseUrl) {
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
-	private String commit(String[] args) {
+	private int commit(String[] args) {
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
-	private String diff(String[] args) {
+	private int diff(String[] args) {
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
 
-	private String list(String[] args) {
+	private int list(String[] args) {
 		if (args.length < 2) {
 			return listAll();
 		}
@@ -76,45 +78,45 @@ extends AbstractCommand {
 		return listEnvironment(args[2]);
 	}
 
-	private String listAll() {
+	private int listAll() {
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
-	private String listEnvironment(String environment) {
+	private int listEnvironment(String environment) {
 		if (environment != null) {
-			listEnvironment(environment);
+			return listEnvironment(environment);
 		}
 
-		return null;
+		return 1;
 	}
 
-	private String pull(String[] args) {
+	private int pull(String[] args) {
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
-	private String push(String[] args) {
+	private int push(String[] args) {
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
-	private String remove(String[] args) {
+	private int remove(String[] args) {
 		if (args.length < 3) {
 			throw new IllegalArgumentException("missing environment name");
 		}
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
-	private String status() {
+	private int status() {
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
-	private String use(String[] args) {
+	private int use(String[] args) {
 		// TODO Auto-generated method stub
-		return null;
+		return 1;
 	}
 
 	@Override

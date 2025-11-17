@@ -13,9 +13,9 @@ extends AbstractCommand {
 	}
 
 	@Override
-	public String execute(String[] args) {
+	public int execute(CommandContext context) {
 //		return getUsage(args).toString();
-		return "Hmm...";
+		return 0;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.strategicgains.cli.command.Command;
+import com.strategicgains.cli.command.CommandContext;
 import com.strategicgains.cli.command.CommandRegistry;
 
 public class Shell {
@@ -13,14 +14,14 @@ public class Shell {
 	private static final String PROMPT = "> ";
 	private static final String EXIT = "exit";
 
-	private Config config;
+	private CommandContext context;
 
-	private Shell(Config config) {
-		this.config = config;
+	private Shell(CommandContext context) {
+		this.context = context;
 	}
 
-	public static int run(Config config) {
-		Shell shell = new Shell(config);
+	public static int run(CommandContext context) {
+		Shell shell = new Shell(context);
 		return shell.execute();
 	}
 
@@ -37,7 +38,10 @@ public class Shell {
 
 		while (true) {
 			console.printf(PROMPT);
-			if (!executeCommand(console)) {
+			console.flush();
+			String input = console.readLine();
+
+			if (!executeCommand(input, console)) {
 				break;
 			}
 		}
@@ -46,8 +50,7 @@ public class Shell {
 		return 0;
 	}
 
-	private boolean executeCommand(Console console) {
-		String input = console.readLine();
+	private boolean executeCommand(String input, Console console) {
 		String[] args = input.split("\\s+");
 
 		if (args[0].equals(EXIT)) {
@@ -60,6 +63,10 @@ public class Shell {
         }
 		catch (IllegalArgumentException e) {
 			console.printf("Error: %s%n", e.getMessage());
+
+			if (context.isDebug()) {
+				e.printStackTrace();
+			}
         }
 
 		return true;
